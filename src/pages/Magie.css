@@ -1,0 +1,38 @@
+.magie-container {
+  color: #f0e6d2;
+  font-family: 'Georgia', serif;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.magie-lista {
+  list-style: none;
+  padding: 0;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.magia-item {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px 25px;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+  text-align: left;
+}
+
+.magia-item h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #ffd700;
+}
+
+.magia-item p {
+  margin: 10px 0 0;
+  font-size: 15px;
+  color: #eee;
+}

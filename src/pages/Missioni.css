@@ -1,0 +1,48 @@
+.missioni-container {
+  color: #f0e6d2;
+  font-family: 'Georgia', serif;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.regione {
+  margin-bottom: 40px;
+}
+
+.lista-missioni {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.missione {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 15px 20px;
+  border-radius: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.missione h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #ffd700;
+}
+
+.missione p {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+
+.missione.facile {
+  border-left: 6px solid #4caf50;
+}
+
+.missione.media {
+  border-left: 6px solid #ff9800;
+}
+
+.missione.difficile {
+  border-left: 6px solid #f44336;
+}

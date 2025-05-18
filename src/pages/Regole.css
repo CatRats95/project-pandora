@@ -1,0 +1,22 @@
+.regole-container {
+  color: #f0e6d2;
+  font-family: 'Georgia', serif;
+  padding: 40px 30px;
+  text-align: left;
+  max-width: 800px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.lista-regole {
+  list-style-position: inside;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.lista-regole li {
+  margin-bottom: 15px;
+  font-size: 16px;
+}

@@ -1,0 +1,26 @@
+.home-container {
+  color: #f0e6d2;
+  font-family: 'Georgia', serif;
+  text-align: center;
+  padding: 30px;
+}
+
+.mappa-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.mappa-img {
+  width: 90%;
+  max-width: 800px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.pedina {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  font-size: 32px;
+  pointer-events: none;
+}
