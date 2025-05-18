@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/project-pandora/static/css/main.e2674b9a.css",
-    "main.js": "/project-pandora/static/js/main.568c653e.js",
+    "main.js": "/project-pandora/static/js/main.44df7fbd.js",
     "static/js/453.f8735ce3.chunk.js": "/project-pandora/static/js/453.f8735ce3.chunk.js",
     "static/media/dragohome.jpg": "/project-pandora/static/media/dragohome.acb958b1be7fe7b05fee.jpg",
     "static/media/mappa.webp": "/project-pandora/static/media/mappa.afc572bc2549634b652f.webp",
     "index.html": "/project-pandora/index.html",
     "main.e2674b9a.css.map": "/project-pandora/static/css/main.e2674b9a.css.map",
-    "main.568c653e.js.map": "/project-pandora/static/js/main.568c653e.js.map",
+    "main.44df7fbd.js.map": "/project-pandora/static/js/main.44df7fbd.js.map",
     "453.f8735ce3.chunk.js.map": "/project-pandora/static/js/453.f8735ce3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e2674b9a.css",
-    "static/js/main.568c653e.js"
+    "static/js/main.44df7fbd.js"
   ]
 }
