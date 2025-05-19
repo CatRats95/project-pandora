@@ -16,3 +16,17 @@ h1 {
   font-size: 40px;
   color: #ffd700;
 }
+.content {
+  flex: 1;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Responsive padding per dispositivi più piccoli */
+@media (max-width: 768px) {
+  .content {
+    padding: 10px;
+  }
+}

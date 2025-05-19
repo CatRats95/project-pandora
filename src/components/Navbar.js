@@ -7,6 +7,7 @@ function Navbar() {
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/personaggi">Personaggi</Link></li>
+         <li><Link to="/combattimento">Combattimento</Link></li>
         <li><Link to="/magie">Magie</Link></li>
         <li><Link to="/mostri">Mostri</Link></li>
         <li><Link to="/missioni">Missioni</Link></li>
