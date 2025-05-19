@@ -3,6 +3,8 @@
   font-family: 'Georgia', serif;
   padding: 40px 20px;
   text-align: center;
+  width: 100%; /* ✅ permette larghezza piena */
+  box-sizing: border-box;
 }
 
 .regione {
@@ -22,6 +24,11 @@
   margin-bottom: 12px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   text-align: left;
+  width: 80%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .missione h3 {
@@ -45,4 +52,24 @@
 
 .missione.difficile {
   border-left: 6px solid #f44336;
+}
+
+/* ✅ Responsive layout per schermi piccoli */
+@media (max-width: 600px) {
+  .missioni-container {
+    padding: 20px 10px;
+  }
+
+  .missione {
+    padding: 12px 15px;
+    width: 95%;
+  }
+
+  .missione h3 {
+    font-size: 16px;
+  }
+
+  .missione p {
+    font-size: 13px;
+  }
 }

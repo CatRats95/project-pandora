@@ -8,6 +8,8 @@
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 20px;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .lista-regole {
@@ -19,4 +21,15 @@
 .lista-regole li {
   margin-bottom: 15px;
   font-size: 16px;
+}
+
+/* ✅ Responsive per dispositivi piccoli */
+@media (max-width: 600px) {
+  .regole-container {
+    padding: 25px 15px;
+  }
+
+  .lista-regole li {
+    font-size: 14px;
+  }
 }

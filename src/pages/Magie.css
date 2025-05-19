@@ -3,6 +3,8 @@
   font-family: 'Georgia', serif;
   text-align: center;
   padding: 40px 20px;
+  width: 100%; /* ✅ utile per layout fluidi */
+  box-sizing: border-box; /* ✅ evita problemi di larghezza */
 }
 
 .magie-lista {
@@ -23,6 +25,7 @@
   max-width: 600px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
   text-align: left;
+  box-sizing: border-box;
 }
 
 .magia-item h3 {
@@ -35,4 +38,24 @@
   margin: 10px 0 0;
   font-size: 15px;
   color: #eee;
+}
+
+/* ✅ Media query per migliorare layout su dispositivi piccoli */
+@media (max-width: 600px) {
+  .magia-item {
+    padding: 15px 18px;
+    width: 95%; /* ✅ usa quasi tutto lo schermo */
+  }
+
+  .magia-item h3 {
+    font-size: 18px;
+  }
+
+  .magia-item p {
+    font-size: 14px;
+  }
+
+  .magie-container {
+    padding: 20px 10px;
+  }
 }
