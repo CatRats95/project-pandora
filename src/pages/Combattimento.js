@@ -1,18 +1,39 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const dadi = [4, 6, 8, 12, 20];
 
 function Combattimento() {
   const [modalita, setModalita] = useState(null);
+  const [avversario, setAvversario] = useState(null);
+  const [impostaHP, setImpostaHP] = useState(false);
+  const [hpIniziali, setHpIniziali] = useState({ g1: 30, g2: 30 });
   const [giocatore1, setGiocatore1] = useState({ hp: 30, turno: true });
   const [giocatore2, setGiocatore2] = useState({ hp: 30, turno: false });
   const [dadoSelezionato, setDadoSelezionato] = useState(6);
+  const [cpuDadoSelezionato, setCpuDadoSelezionato] = useState(6);
   const [danno, setDanno] = useState(null);
   const [messaggio, setMessaggio] = useState("");
   const [tipoAzione, setTipoAzione] = useState(null);
 
+  const isGiocoFinito = giocatore1.hp <= 0 || giocatore2.hp <= 0;
+  const vincitore = giocatore1.hp <= 0 ? "Giocatore 2 vince!" : giocatore2.hp <= 0 ? "Giocatore 1 vince!" : "";
+
+  const getAvversarioImg = () => {
+    const base = `${process.env.PUBLIC_URL}/img/`;
+    switch (avversario) {
+      case "drago": return base + "drago.png";
+      case "pirata": return base + "pirata.png";
+      case "zombie": return base + "zombie.png";
+      default: return base + "zombie.png";
+    }
+  };
+
   const reset = () => {
+    setModalita(null);
+    setAvversario(null);
+    setImpostaHP(false);
+    setHpIniziali({ g1: 30, g2: 30 });
     setGiocatore1({ hp: 30, turno: true });
     setGiocatore2({ hp: 30, turno: false });
     setDanno(null);
@@ -43,52 +64,69 @@ function Combattimento() {
   };
 
   const eseguiAzione = useCallback((tipo) => {
+    if (isGiocoFinito) return;
     setTipoAzione(tipo);
     const attaccante = giocatore1.turno ? "Giocatore 1" : "Giocatore 2";
+    const dado = giocatore1.turno ? dadoSelezionato : cpuDadoSelezionato;
     let valore = 0;
 
     if (tipo === "attacco") {
-      valore = lanciaDado(dadoSelezionato);
-      setMessaggio(`${attaccante} attacca con d${dadoSelezionato} → ${valore} danni`);
+      valore = lanciaDado(dado);
+      setMessaggio(`${attaccante} attacca con d${dado} → ${valore} danni`);
       infliggiDanno(valore);
     } else if (tipo === "cura") {
-      valore = lanciaDado(dadoSelezionato);
+      valore = lanciaDado(dado);
       setMessaggio(`${attaccante} si cura di ${valore}`);
       cura(valore);
     } else if (tipo === "magia") {
-      valore = lanciaDado(dadoSelezionato) + 2;
+      valore = lanciaDado(dado) + 2;
       setMessaggio(`${attaccante} lancia una magia! → ${valore} danni`);
       infliggiDanno(valore);
     }
 
     setDanno(valore);
-    setTimeout(() => {
-      setDanno(null);
-      passaTurno();
-    }, 1200);
-  }, [giocatore1.turno, dadoSelezionato, lanciaDado, infliggiDanno, cura]);
+  }, [giocatore1.turno, dadoSelezionato, cpuDadoSelezionato, lanciaDado, infliggiDanno, cura, isGiocoFinito]);
 
-  useEffect(() => {
-    if (modalita === "cpu" && !giocatore1.turno && giocatore2.hp > 0) {
-      setTimeout(() => {
-        let scelta = "attacco";
-        if (giocatore2.hp <= 10 && Math.random() < 0.5) scelta = "cura";
-        else if (giocatore2.hp <= 8 && Math.random() < 0.5) scelta = "magia";
-        eseguiAzione(scelta);
-      }, 1000);
-    }
-  }, [giocatore1.turno, giocatore2.hp, modalita, eseguiAzione]);
-
-  const isGiocoFinito = giocatore1.hp <= 0 || giocatore2.hp <= 0;
-  const vincitore =
-    giocatore1.hp <= 0 ? "Giocatore 2 vince!" : giocatore2.hp <= 0 ? "Giocatore 1 vince!" : "";
-
-  if (!modalita) {
+  if (!modalita && !impostaHP) {
     return (
       <div style={{ textAlign: "center", marginTop: 50 }}>
         <h2>Scegli la modalità di combattimento</h2>
-        <button onClick={() => setModalita("cpu")}>🧠 Giocatore vs Mostro</button>
-        <button onClick={() => setModalita("pvp")}>👥 Giocatore vs Giocatore</button>
+        <button onClick={() => { setModalita("cpu"); setImpostaHP(true); }}>🧠 Giocatore vs Mostro</button>
+        <button onClick={() => { setModalita("pvp"); setImpostaHP(true); }}>👥 Giocatore vs Giocatore</button>
+      </div>
+    );
+  }
+
+  if (modalita && !avversario) {
+    return (
+      <div style={{ textAlign: "center", marginTop: 50 }}>
+        <h2>Scegli l'avversario</h2>
+        <button onClick={() => setAvversario("drago")}>🐉 Drago</button>
+        <button onClick={() => setAvversario("pirata")}>🏴‍☠️ Pirata</button>
+        <button onClick={() => setAvversario("zombie")}>🧟 Zombie</button>
+      </div>
+    );
+  }
+
+  if (impostaHP && avversario) {
+    return (
+      <div style={{ textAlign: "center", marginTop: 50 }}>
+        <h2>Imposta Punti Vita Iniziali</h2>
+        <div style={{ marginBottom: 20 }}>
+          <label>Giocatore 1: </label>
+          <input type="number" value={hpIniziali.g1} onChange={(e) => setHpIniziali({ ...hpIniziali, g1: parseInt(e.target.value) })} />
+        </div>
+        <div style={{ marginBottom: 20 }}>
+          <label>Avversario: </label>
+          <input type="number" value={hpIniziali.g2} onChange={(e) => setHpIniziali({ ...hpIniziali, g2: parseInt(e.target.value) })} />
+        </div>
+        <button onClick={() => {
+          setGiocatore1({ hp: hpIniziali.g1, turno: true });
+          setGiocatore2({ hp: hpIniziali.g2, turno: false });
+          setImpostaHP(false);
+        }}>
+          Inizia il Duello
+        </button>
       </div>
     );
   }
@@ -97,15 +135,28 @@ function Combattimento() {
     <div style={{ textAlign: "center", padding: "30px" }}>
       <h2>Combattimento ({modalita === "cpu" ? "Giocatore vs Mostro" : "PvP"})</h2>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 40, marginBottom: 30 }}>
-        <div>
-          <strong>Giocatore 1</strong>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 80, marginBottom: 30 }}>
+        <motion.div
+          key={Math.random()}
+          animate={{ x: giocatore1.turno && tipoAzione === "attacco" ? [0, -30, 0] : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ textAlign: "center" }}
+        >
+          <img src={`${process.env.PUBLIC_URL}/img/combattente.png`} alt="Combattente" style={{ height: 150, border: "2px solid #444", borderRadius: "8px" }} />
+          <div><strong>Giocatore 1</strong></div>
           <div>❤️ {giocatore1.hp}</div>
-        </div>
-        <div>
-          <strong>{modalita === "cpu" ? "Mostro" : "Giocatore 2"}</strong>
+        </motion.div>
+
+        <motion.div
+          key={Math.random()}
+          animate={{ x: !giocatore1.turno && tipoAzione === "attacco" ? [0, 30, 0] : 0 }}
+          transition={{ duration: 0.4 }}
+          style={{ textAlign: "center" }}
+        >
+          <img src={getAvversarioImg()} alt="Avversario" style={{ height: 150, border: "2px solid #444", borderRadius: "8px" }} />
+          <div><strong>{modalita === "cpu" ? "Mostro" : "Giocatore 2"}</strong></div>
           <div>❤️ {giocatore2.hp}</div>
-        </div>
+        </motion.div>
       </div>
 
       <div style={{ marginBottom: 10, minHeight: 30 }}>{messaggio}</div>
@@ -113,16 +164,11 @@ function Combattimento() {
       <AnimatePresence>
         {danno !== null && (
           <motion.div
-            key={tipoAzione}
+            key={tipoAzione + Math.random()}
             initial={{ opacity: 0, y: 0 }}
             animate={{ opacity: 1, y: -30, scale: 1.2 }}
             exit={{ opacity: 0, y: -60 }}
-            style={{
-              fontSize: "28px",
-              color: tipoAzione === "cura" ? "lime" : "red",
-              fontWeight: "bold",
-              marginBottom: 20,
-            }}
+            style={{ fontSize: "28px", color: tipoAzione === "cura" ? "lime" : "red", fontWeight: "bold", marginBottom: 20 }}
           >
             {tipoAzione === "cura" ? "+" : "-"}{danno}
           </motion.div>
@@ -132,19 +178,7 @@ function Combattimento() {
       <div style={{ marginBottom: 15 }}>
         <span>Scegli il dado: </span>
         {dadi.map((d) => (
-          <button
-            key={d}
-            onClick={() => setDadoSelezionato(d)}
-            style={{
-              margin: "0 5px",
-              padding: "5px 10px",
-              backgroundColor: dadoSelezionato === d ? "#ffd700" : "transparent",
-              color: "#000",
-              border: "1px solid #aaa",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
+          <button key={d} onClick={() => setDadoSelezionato(d)} style={{ margin: "0 5px", padding: "5px 10px", backgroundColor: dadoSelezionato === d ? "#ffd700" : "transparent", color: "#000", border: "1px solid #aaa", borderRadius: "6px", cursor: "pointer" }}>
             d{d}
           </button>
         ))}
@@ -152,9 +186,38 @@ function Combattimento() {
 
       {!isGiocoFinito && (
         <div style={{ marginBottom: 30 }}>
-          <button onClick={() => eseguiAzione("attacco")}>🗡️ Attacco</button>
-          <button onClick={() => eseguiAzione("magia")}>🔮 Magia</button>
-          <button onClick={() => eseguiAzione("cura")}>💊 Cura</button>
+          {giocatore1.turno ? (
+            <>
+              <button onClick={() => eseguiAzione("attacco")}>🗡️ Attacco</button>
+              <button onClick={() => eseguiAzione("magia")}>🔮 Magia</button>
+              <button onClick={() => eseguiAzione("cura")}>💊 Cura</button>
+              <br /><br />
+              <button onClick={passaTurno}>➡️ Passa Turno</button>
+            </>
+          ) : modalita === "cpu" ? (
+            <>
+              <h4>🎯 CPU: scegli dado</h4>
+              {dadi.map((d) => (
+                <button key={d} onClick={() => setCpuDadoSelezionato(d)} style={{ margin: "0 5px", padding: "5px 10px", backgroundColor: cpuDadoSelezionato === d ? "#90ee90" : "transparent", color: "#000", border: "1px solid #aaa", borderRadius: "6px", cursor: "pointer" }}>
+                  d{d}
+                </button>
+              ))}
+              <br /><br />
+              <button onClick={() => eseguiAzione("attacco")}>🤖 CPU Attacca</button>
+              <button onClick={() => eseguiAzione("magia")}>🔮 CPU Magia</button>
+              <button onClick={() => eseguiAzione("cura")}>💊 CPU Cura</button>
+              <br /><br />
+              <button onClick={passaTurno}>➡️ Passa Turno</button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => eseguiAzione("attacco")}>🗡️ Attacco</button>
+              <button onClick={() => eseguiAzione("magia")}>🔮 Magia</button>
+              <button onClick={() => eseguiAzione("cura")}>💊 Cura</button>
+              <br /><br />
+              <button onClick={passaTurno}>➡️ Passa Turno</button>
+            </>
+          )}
         </div>
       )}
 
